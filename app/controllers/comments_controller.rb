@@ -4,7 +4,11 @@ class CommentsController < ApplicationController
     if comment.save
       redirect_to(prototype_path(comment.prototype_id))
     else
-      render "/prototypes/#{comment.prototype_id}"
+      @prototype = Prototype.find(comment.prototype_id)
+      @comment = Comment.new
+      query = "SELECT * FROM comments WHERE prototype_id = #{@prototype.id}"
+      @comments = Comment.find_by_sql(query)
+      render '/prototypes/show'
     end
   end
 
